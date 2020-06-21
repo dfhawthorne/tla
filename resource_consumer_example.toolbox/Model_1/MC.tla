@@ -1,21 +1,31 @@
 ---- MODULE MC ----
 EXTENDS resource_consumer_example, TLC
 
+\* MV CONSTANT declarations@modelParameterConstants
+CONSTANTS
+a1, a2
+----
+
+\* MV CONSTANT definitions Actors
+const_159273958772514000 == 
+{a1, a2}
+----
+
+\* SYMMETRY definition
+symm_159273958772515000 == 
+Permutations(const_159273958772514000)
+----
+
 \* CONSTANT definitions @modelParameterConstants:0ResourceCap
-const_15927369466047000 == 
-4
+const_159273958772516000 == 
+6
 ----
 
 \* CONSTANT definitions @modelParameterConstants:1MaxConsumerReq
-const_15927369466048000 == 
+const_159273958772517000 == 
 2
-----
-
-\* CONSTANT definitions @modelParameterConstants:2Actors
-const_15927369466049000 == 
-{ "a1", "a2" }
 ----
 
 =============================================================================
 \* Modification History
-\* Created Sun Jun 21 20:55:46 AEST 2020 by douglas
+\* Created Sun Jun 21 21:39:47 AEST 2020 by douglas
