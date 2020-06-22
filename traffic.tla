@@ -11,7 +11,7 @@ variables
   
 \* Light process
 
-process light = "light"
+fair process light = "light"
 begin
   Cycle:
     while at_light do
@@ -21,7 +21,7 @@ end process;
 
 \* Car process
 
-process car = "car"
+fair process car = "car"
 begin
   Drive:
     when light = "green";
@@ -29,8 +29,8 @@ begin
 end process;
 
 end algorithm; *) 
-\* BEGIN TRANSLATION - the hash of the PCal code: PCal-2ef598cb49bc4d5b86d12ad6029d1857
-\* Process light at line 14 col 1 changed to light_
+\* BEGIN TRANSLATION - the hash of the PCal code: PCal-a9c244c1d16a232761a30da48c8b1810
+\* Process light at line 14 col 6 changed to light_
 VARIABLES at_light, light, pc
 
 vars == << at_light, light, pc >>
@@ -68,13 +68,15 @@ Terminating == /\ \A self \in ProcSet: pc[self] = "Done"
 Next == light_ \/ car
            \/ Terminating
 
-Spec == Init /\ [][Next]_vars
+Spec == /\ Init /\ [][Next]_vars
+        /\ WF_vars(light_)
+        /\ WF_vars(car)
 
 Termination == <>(\A self \in ProcSet: pc[self] = "Done")
 
-\* END TRANSLATION - the hash of the generated TLA code (remove to silence divergence warnings): TLA-fddafdbdcc7ac6405d7c9bf53d757839
+\* END TRANSLATION - the hash of the generated TLA code (remove to silence divergence warnings): TLA-77b7e785c116f69a88bad4c2307e37ff
 
 =============================================================================
 \* Modification History
-\* Last modified Mon Jun 22 19:31:06 AEST 2020 by douglas
+\* Last modified Mon Jun 22 19:39:52 AEST 2020 by douglas
 \* Created Mon Jun 22 19:24:41 AEST 2020 by douglas
