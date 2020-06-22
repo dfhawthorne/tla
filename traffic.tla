@@ -21,7 +21,7 @@ end process;
 
 \* Car process
 
-fair process car = "car"
+fair+ process car = "car"
 begin
   Drive:
     when light = "green";
@@ -29,7 +29,7 @@ begin
 end process;
 
 end algorithm; *) 
-\* BEGIN TRANSLATION - the hash of the PCal code: PCal-a9c244c1d16a232761a30da48c8b1810
+\* BEGIN TRANSLATION - the hash of the PCal code: PCal-35e0c0f830b5934ec44c55d3d29bd389
 \* Process light at line 14 col 6 changed to light_
 VARIABLES at_light, light, pc
 
@@ -70,13 +70,13 @@ Next == light_ \/ car
 
 Spec == /\ Init /\ [][Next]_vars
         /\ WF_vars(light_)
-        /\ WF_vars(car)
+        /\ SF_vars(car)
 
 Termination == <>(\A self \in ProcSet: pc[self] = "Done")
 
-\* END TRANSLATION - the hash of the generated TLA code (remove to silence divergence warnings): TLA-77b7e785c116f69a88bad4c2307e37ff
+\* END TRANSLATION - the hash of the generated TLA code (remove to silence divergence warnings): TLA-074e5872c39ac24dfb6b988bdbd0e1d2
 
 =============================================================================
 \* Modification History
-\* Last modified Mon Jun 22 19:39:52 AEST 2020 by douglas
+\* Last modified Mon Jun 22 19:43:10 AEST 2020 by douglas
 \* Created Mon Jun 22 19:24:41 AEST 2020 by douglas
