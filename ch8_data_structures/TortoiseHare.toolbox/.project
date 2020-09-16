@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>TortoiseHare</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>toolbox.builder.TLAParserBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>toolbox.natures.TLANature</nature>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>LinkedLists.tla</name>
+			<type>1</type>
+			<location>/home/douglas/Documents/tla/ch8_data_structures/LinkedLists.tla</location>
+		</link>
+		<link>
+			<name>TortoiseHare.tla</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/TortoiseHare.tla</locationURI>
+		</link>
+	</linkedResources>
+</projectDescription>
