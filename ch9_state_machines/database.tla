@@ -4,8 +4,8 @@ CONSTANTS Data, NULL, Clients
 
 (*--algorithm database
 variables
-  query = [c \in Clients |-> NULL];
-  db_value \in Data;
+  query = [c \in Clients |-> NULL],
+  ghost_db_history = [c \in Clients |-> NULL];
   
 define
   Exists(val) == val /= NULL
@@ -21,6 +21,7 @@ macro wait_for_response() begin
 end macro;
 
 process database = "Database"
+  variable db_value \in Data;
 begin
   DB:
     with client \in RequestingClients, q = query[client] do
@@ -31,6 +32,7 @@ begin
       else
         assert FALSE; \* What did we even pass in
       end if;
+      ghost_db_history[client] := db_value;
       query[client] := [type |-> "response", result |-> db_value];
     end with;
     goto DB;
@@ -46,7 +48,7 @@ begin
         Confirm:
           wait_for_response();
           result := query[self].result;
-          assert result = db_value;
+          assert result = ghost_db_history[self];
       or \* write
         with d \in Data do
           request([request |-> "write", data |-> d]);
@@ -58,21 +60,23 @@ begin
 end process;
 
 end algorithm; *)
-\* BEGIN TRANSLATION - the hash of the PCal code: PCal-682db042842f6ca0a371e6224c26cc68
-VARIABLES query, db_value, pc
+\* BEGIN TRANSLATION - the hash of the PCal code: PCal-100b9401b97c4ed709ef9a3047b8a213
+VARIABLES query, ghost_db_history, pc
 
 (* define statement *)
 Exists(val) == val /= NULL
 RequestingClients == {c \in Clients: Exists(query[c]) /\ query[c].type = "request"}
 
-VARIABLE result
+VARIABLES db_value, result
 
-vars == << query, db_value, pc, result >>
+vars == << query, ghost_db_history, pc, db_value, result >>
 
 ProcSet == {"Database"} \cup (Clients)
 
 Init == (* Global variables *)
         /\ query = [c \in Clients |-> NULL]
+        /\ ghost_db_history = [c \in Clients |-> NULL]
+        (* Process database *)
         /\ db_value \in Data
         (* Process clients *)
         /\ result = [self \in Clients |-> NULL]
@@ -87,8 +91,9 @@ DB == /\ pc["Database"] = "DB"
                    ELSE /\ IF q.request = "read"
                               THEN /\ TRUE
                               ELSE /\ Assert(FALSE, 
-                                             "Failure of assertion at line 32, column 9.")
+                                             "Failure of assertion at line 33, column 9.")
                         /\ UNCHANGED db_value
+             /\ ghost_db_history' = [ghost_db_history EXCEPT ![client] = db_value']
              /\ query' = [query EXCEPT ![client] = [type |-> "response", result |-> db_value']]
       /\ pc' = [pc EXCEPT !["Database"] = "DB"]
       /\ UNCHANGED result
@@ -101,20 +106,20 @@ Request(self) == /\ pc[self] = "Request"
                     \/ /\ \E d \in Data:
                             query' = [query EXCEPT ![self] = [type |-> "request"] @@ ([request |-> "write", data |-> d])]
                        /\ pc' = [pc EXCEPT ![self] = "Wait"]
-                 /\ UNCHANGED << db_value, result >>
+                 /\ UNCHANGED << ghost_db_history, db_value, result >>
 
 Confirm(self) == /\ pc[self] = "Confirm"
                  /\ query[self].type = "response"
                  /\ result' = [result EXCEPT ![self] = query[self].result]
-                 /\ Assert(result'[self] = db_value, 
-                           "Failure of assertion at line 49, column 11.")
+                 /\ Assert(result'[self] = ghost_db_history[self], 
+                           "Failure of assertion at line 51, column 11.")
                  /\ pc' = [pc EXCEPT ![self] = "Request"]
-                 /\ UNCHANGED << query, db_value >>
+                 /\ UNCHANGED << query, ghost_db_history, db_value >>
 
 Wait(self) == /\ pc[self] = "Wait"
               /\ query[self].type = "response"
               /\ pc' = [pc EXCEPT ![self] = "Request"]
-              /\ UNCHANGED << query, db_value, result >>
+              /\ UNCHANGED << query, ghost_db_history, db_value, result >>
 
 clients(self) == Request(self) \/ Confirm(self) \/ Wait(self)
 
@@ -123,9 +128,9 @@ Next == database
 
 Spec == Init /\ [][Next]_vars
 
-\* END TRANSLATION - the hash of the generated TLA code (remove to silence divergence warnings): TLA-72b69c8c6357ea250cf38a7c831ac6cf
+\* END TRANSLATION - the hash of the generated TLA code (remove to silence divergence warnings): TLA-358350b5f8ea1bfda411fb9618a0d88c
 
 =============================================================================
 \* Modification History
-\* Last modified Wed Sep 16 19:38:41 AEST 2020 by douglas
+\* Last modified Thu Sep 17 17:50:55 AEST 2020 by douglas
 \* Created Wed Sep 16 19:05:42 AEST 2020 by douglas
