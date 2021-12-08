@@ -12,20 +12,20 @@ b1, b2
 ----
 
 \* MV CONSTANT definitions People
-const_160033300805944000 == 
+const_16389616415942000 == 
 {p1}
 ----
 
 \* MV CONSTANT definitions Books
-const_160033300805945000 == 
+const_16389616415943000 == 
 {b1, b2}
 ----
 
 \* CONSTANT definitions @modelParameterConstants:0NumCopies
-const_160033300805946000 == 
+const_16389616415944000 == 
 1..1
 ----
 
 =============================================================================
 \* Modification History
-\* Created Thu Sep 17 18:56:48 AEST 2020 by douglas
+\* Created Wed Dec 08 22:07:21 AEDT 2021 by douglas

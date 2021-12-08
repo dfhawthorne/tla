@@ -18,7 +18,7 @@
 		<link>
 			<name>PT.tla</name>
 			<type>1</type>
-			<location>/home/douglas/Documents/tla/ch10_business_logic/PT.tla</location>
+			<locationURI>PARENT-1-PROJECT_LOC/PT.tla</locationURI>
 		</link>
 		<link>
 			<name>main.tla</name>
