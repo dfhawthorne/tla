@@ -1,3 +1,7 @@
 *.out
 *_SnapShot_*
 *.pmap
+*.pdf
+*.log
+*.tex
+*.aux
